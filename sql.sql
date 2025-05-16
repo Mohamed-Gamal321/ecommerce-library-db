@@ -160,3 +160,86 @@ INSERT INTO order_product (order_id, product_id, quantity) VALUES
 (8, 10, 1),
 (9, 2, 1),
 (10, 5, 1);
+
+mysql> SELECT * FROM users
+    -> WHERE fullname LIKE '%John%';
++---------+----------+----------+----------+------------------+------------+------------+
+| user_id | username | password | fullname | email            | phone      | address_id |
++---------+----------+----------+----------+------------------+------------+------------+
+|       1 | user1    | pass123  | John Doe | john@example.com | 1234567890 |          1 |
++---------+----------+----------+----------+------------------+------------+------------+
+1 row in set (0.016 sec)
+
+
+mysql> SELECT * FROM orders
+    -> WHERE status = 'Completed';
++----------+---------+------------+-----------+---------------------+
+| order_id | user_id | payment_id | status    | date                |
++----------+---------+------------+-----------+---------------------+
+|        1 |       1 |          1 | Completed | 2025-05-16 14:30:00 |
+|        4 |       4 |          4 | Completed | 2025-05-17 10:00:00 |
+|        7 |       7 |          7 | Completed | 2025-05-18 11:00:00 |
+|       10 |      10 |         10 | Completed | 2025-05-20 08:00:00 |
++----------+---------+------------+-----------+---------------------+
+4 rows in set (0.012 sec)
+
+mysql> SELECT user_id, COUNT(order_id) AS total_orders
+    -> FROM orders
+    -> GROUP BY user_id;
++---------+--------------+
+| user_id | total_orders |
++---------+--------------+
+|       1 |            1 |
+|       2 |            1 |
+|       3 |            1 |
+|       4 |            1 |
+|       5 |            1 |
+|       6 |            1 |
+|       7 |            1 |
+|       8 |            1 |
+|       9 |            1 |
+|      10 |            1 |
++---------+--------------+
+10 rows in set (0.008 sec)
+
+
+
+mysql> SELECT * FROM product
+    -> WHERE price > 100;
++------------+---------------+----------------------------+---------+-------------+
+| product_id | title         | description                | price   | category_id |
++------------+---------------+----------------------------+---------+-------------+
+|          1 | Laptop        | High-performance laptop    | 1200.00 |           1 |
+|          2 | Smartphone    | Latest model smartphone    |  800.00 |           1 |
+|          5 | Tennis Racket | Professional tennis racket |  150.00 |           4 |
+|          8 | Sofa          | Comfortable 3-seater sofa  |  500.00 |           7 |
++------------+---------------+----------------------------+---------+-------------+
+4 rows in set (0.012 sec)
+
+
+mysql> SELECT * FROM product
+    -> WHERE title LIKE '%Book%';
++------------+------------+--------------------+-------+-------------+
+| product_id | title      | description        | price | category_id |
++------------+------------+--------------------+-------+-------------+
+|          3 | Novel Book | Best-selling novel | 20.00 |           2 |
++------------+------------+--------------------+-------+-------------+
+1 row in set (0.011 sec)
+
+
+mysql> SELECT order_id, SUM(quantity * price) AS total_order_value
+    -> FROM order_product op
+    -> JOIN product p ON op.product_id = p.product_id
+    -> GROUP BY order_id;
++----------+-------------------+
+| order_id | total_order_value |
++----------+-------------------+
+|        1 |           3200.00 |
+|        2 |            170.00 |
+|        3 |             95.00 |
+|        4 |             70.00 |
+|        5 |            500.00 |
+|        6 |            100.00 |
+|        7 |             40.00 |
++----------+-------------------+
+7 rows in set (0.014 sec)
